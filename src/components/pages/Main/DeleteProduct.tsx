@@ -44,7 +44,7 @@ const DeleteProduct = ({ row }: Props) => {
         </p>
       </div>
       <div className="flex justify-end gap-2">
-        <Button type="outline" variant="outline" onClick={toggleModal}>
+        <Button type="button" variant="outline" onClick={toggleModal}>
           Cancel
         </Button>
         <Button
