@@ -87,11 +87,12 @@ const Main = () => {
             </Button>
           </div>
         </div>
-        <div className="min-h-[300px] max-h-[400px]">
+        <div className="overflow-auto scrollbar max-h-[300px]">
           <DataTable columns={columnConfig()} table={table} />
         </div>
-        <div className="flex w-full flex-end">
-          <div>Expected Sales: {formatCurrency(computedSales())}</div>
+        <div className="flex mt-6 gap-1">
+          <p>Expected Sales:</p>{" "}
+          <p className="font-bold">{formatCurrency(computedSales())}</p>
         </div>
         <Modal
           open={modalConfig.open}
