@@ -1,15 +1,21 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export interface IModalProps {
-  trigger: any;
+  trigger?: any;
   children: any;
-  open?: boolean;
+  open: boolean;
+  closeModal?: any;
 }
 
-const Modal = ({ trigger, children, open }: IModalProps) => {
+const Modal = ({ trigger, children, open, closeModal }: IModalProps) => {
   return (
-    <Dialog open={open} modal={open}>
-      <DialogTrigger>{trigger}</DialogTrigger>
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        closeModal();
+      }}
+    >
+      {trigger ? <DialogTrigger>{trigger}</DialogTrigger> : null}
       <DialogContent>{children}</DialogContent>
     </Dialog>
   );

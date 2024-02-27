@@ -6,9 +6,10 @@ interface Props {
   placeholder?: string;
   label?: string;
   isError?: boolean;
-  errorMsg?: string;
+  errorMsg?: any;
   type?: string;
   subLabel?: string;
+  labelOption?: string;
 }
 
 const CustomInput = ({
@@ -19,6 +20,7 @@ const CustomInput = ({
   errorMsg,
   type,
   subLabel,
+  labelOption,
   ...rest
 }: Props) => {
   return (
@@ -26,14 +28,18 @@ const CustomInput = ({
       <div className="flex h-[20px] justify-between items-center">
         <div className="flex items-center gap-1">
           <Label htmlFor="name">{label}</Label>
-          {subLabel ? (
-            <Label className="text-gray-500 italic">({subLabel})</Label>
+          {labelOption ? (
+            <Label className="text-gray-500 italic">({labelOption})</Label>
           ) : null}
         </div>
         {isError && (
           <Label className="text-red-700 italic text-[12px]">Required*</Label>
         )}
       </div>
+
+      {subLabel ? (
+        <p className="text-sm text-gray-600 italic">{subLabel}</p>
+      ) : null}
       <Input
         className={`${isError && "!border-red-700 border-2"}`}
         placeholder={placeholder}

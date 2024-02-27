@@ -9,6 +9,7 @@ const MainLayout = ({ className, children }: Props) => {
   return (
     <div className={`h-screen ${className || ""}`}>
       {children}
+      {/* needed for modal */}
       <Toaster />
     </div>
   );

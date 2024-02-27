@@ -1,18 +1,17 @@
-import Modal from "@/components/custom/Modal";
 import DeleteOutlined from "@/components/icons/DeleteOutlined";
 import { Button } from "@/components/ui/button";
 import { useFirbaseService } from "@/hooks/useFirbaseService";
-import { useState } from "react";
+import { useMainStore } from "@/lib/zustand/mainStore";
 
 interface Props {
   row?: any;
 }
 const DeleteProduct = ({ row }: Props) => {
-  const [open, setOpen] = useState(false);
   const { deleteProduct, isLoading } = useFirbaseService();
+  const { closeModal, modalConfig } = useMainStore();
 
   const toggleModal = () => {
-    setOpen(!open);
+    closeModal(modalConfig);
   };
 
   const handleDelete = () =>
@@ -22,18 +21,11 @@ const DeleteProduct = ({ row }: Props) => {
     });
 
   return (
-    <Modal
-      open={open}
-      trigger={
-        <Button variant="destructive" onClick={toggleModal}>
-          <DeleteOutlined />
-        </Button>
-      }
-    >
+    <div>
       <div>
         <div className="flex gap-2 items-center">
           <DeleteOutlined className="text-[25px]" />
-          <p className="text-2xl font-bold">Delete Product </p>
+          <p className="text-2xl font-bold">Delete Product</p>
         </div>
         <p className="pb-2">
           Are you sure you want to delete this product{" "}
@@ -55,7 +47,7 @@ const DeleteProduct = ({ row }: Props) => {
           Delete
         </Button>
       </div>
-    </Modal>
+    </div>
   );
 };
 

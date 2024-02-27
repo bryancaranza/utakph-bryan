@@ -1,7 +1,6 @@
 import CustomInput from "@/components/custom/Input";
 import { Button } from "@/components/ui/button";
 import { useFirbaseService } from "@/hooks/useFirbaseService";
-import { createProductDefaultValues } from "@/lib/constants";
 import { TProduct } from "@/lib/interface";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +8,11 @@ import { ProductSchema } from "@/lib/schema";
 import { validateStringToNumber } from "@/lib/helpers/stringHelpers";
 import { useMainStore } from "@/lib/zustand/mainStore";
 
-const CreateProduct = () => {
+interface Props {
+  row: any;
+}
+
+const UpdateProduct = ({ row }: Props) => {
   const {
     handleSubmit,
     control,
@@ -17,11 +20,18 @@ const CreateProduct = () => {
     reset,
     setValue,
   } = useForm({
-    defaultValues: createProductDefaultValues,
+    defaultValues: {
+      name: row.name,
+      category: row.category,
+      option: row.option,
+      price: validateStringToNumber(row?.price.toString()),
+      cost: validateStringToNumber(row?.cost.toString()),
+      stock: validateStringToNumber(row?.stock.toString()),
+    },
     resolver: zodResolver(ProductSchema),
   });
 
-  const { createProduct, isLoading } = useFirbaseService();
+  const { updateProduct, isLoading } = useFirbaseService();
   const { closeModal, modalConfig } = useMainStore();
 
   const toggleModal = () => {
@@ -29,11 +39,19 @@ const CreateProduct = () => {
     reset();
   };
 
-  const handleCreate = (data: TProduct) => {
-    createProduct(data, {
+  const handleUpdate = (data: TProduct) => {
+    const payload = {
+      id: row.id,
+      data: {
+        ...data,
+        id: row.id,
+      },
+    };
+    updateProduct(payload, {
       onSuccess: toggleModal,
       onError: toggleModal,
     });
+    reset();
   };
 
   const handleNumberOnchange = (
@@ -48,12 +66,12 @@ const CreateProduct = () => {
   return (
     <div>
       <div className="pb-4">
-        <p className="text-2xl font-bold">Create New Product</p>
-        <p className="text-gray-500"> Fill up all required fields.</p>
+        <p className="text-2xl font-bold">Update Existing Product</p>
+        {/* <p className="text-gray-500">Fill up all required fields.</p> */}
       </div>
       <form
         className="flex flex-col gap-2"
-        onSubmit={handleSubmit(handleCreate)}
+        onSubmit={handleSubmit(handleUpdate)}
       >
         <div className="grid w-full items-center max-h-[400px] scrollbar overflow-auto">
           <Controller
@@ -179,4 +197,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default UpdateProduct;

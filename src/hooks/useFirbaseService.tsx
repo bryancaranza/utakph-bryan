@@ -87,10 +87,44 @@ export const useFirbaseService = () => {
       });
   };
 
+  const updateProduct = async (
+    payload: {
+      id: string;
+      data: Product;
+    },
+    callback?: { onSuccess: () => void; onError: () => void }
+  ) => {
+    const dbRef = ref(db, CONSTANTS.ENDPOINTS.PRODUCTS + `/${payload.id}`);
+    setIsLoading(true);
+
+    await set(dbRef, payload.data)
+      .then(() => {
+        toast({
+          title: "Update product success.",
+          description: "You have successfully updated a product.",
+        });
+        setIsLoading(false);
+
+        if (callback?.onSuccess) callback.onSuccess();
+      })
+      .catch(() => {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong!",
+          description: "Please try again.",
+        });
+
+        setIsLoading(false);
+
+        if (callback?.onError) callback.onError();
+      });
+  };
+
   return {
     isLoading,
-    createProduct,
     getProducts,
+    createProduct,
     deleteProduct,
+    updateProduct,
   };
 };
