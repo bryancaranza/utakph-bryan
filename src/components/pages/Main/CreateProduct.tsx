@@ -49,7 +49,7 @@ const CreateProduct = () => {
     <div>
       <div className="pb-4">
         <p className="text-2xl font-bold">Create New Product</p>
-        <p className="text-gray-500"> Fill up all required fields.</p>
+        <p className=""> Fill up all required fields.</p>
       </div>
       <form
         className="flex flex-col gap-2"

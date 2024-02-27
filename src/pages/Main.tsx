@@ -20,6 +20,7 @@ import AddOutlined from "@/components/icons/AddOutlined";
 import { Button } from "@/components/ui/button";
 import { useMainStore } from "@/lib/zustand/mainStore";
 import Modal from "@/components/custom/Modal";
+import { formatCurrency } from "@/lib/helpers/stringHelpers";
 
 const Main = () => {
   const [data, setData] = useState<Product[]>([]);
@@ -28,6 +29,16 @@ const Main = () => {
 
   const { getProducts } = useFirbaseService();
   const { closeModal, modalConfig, setModalConfig } = useMainStore();
+
+  const computedSales = () => {
+    const rowTotal = data.map((item) => {
+      return item.price - item.cost * item.stock;
+    });
+    const totalExpectedSales = rowTotal.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+    return totalExpectedSales || 0;
+  };
 
   const table = useReactTable({
     data,
@@ -76,8 +87,11 @@ const Main = () => {
             </Button>
           </div>
         </div>
-        <div className="min-h-[300px]">
+        <div className="min-h-[300px] max-h-[400px]">
           <DataTable columns={columnConfig()} table={table} />
+        </div>
+        <div className="flex w-full flex-end">
+          <div>Expected Sales: {formatCurrency(computedSales())}</div>
         </div>
         <Modal
           open={modalConfig.open}

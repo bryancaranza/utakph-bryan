@@ -30,7 +30,9 @@ export const columnConfig = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize font-semibold">{row.getValue("name")}</div>
+        <div className="capitalize font-semibold max-h-[200px] max-w-[140px] truncate">
+          {row.getValue("name")}
+        </div>
       ),
     },
     {
@@ -49,7 +51,9 @@ export const columnConfig = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("category")}</div>
+        <div className="capitalize font-semibold max-h-[200px] max-w-[140px] truncate">
+          {row.getValue("category")}
+        </div>
       ),
     },
     {
