@@ -23,6 +23,14 @@ const CustomInput = ({
   labelOption,
   ...rest
 }: Props) => {
+  const errorLabel = () => {
+    if (errorMsg.type !== "too_small") {
+      if (errorMsg.message.includes("Expected number")) return "Invalid input";
+      return errorMsg.message;
+    }
+    return "";
+  };
+
   return (
     <div className="flex flex-col space-y-1.5 mb-2 px-1">
       <div className="flex h-[20px] justify-between items-center">
@@ -33,7 +41,9 @@ const CustomInput = ({
           ) : null}
         </div>
         {isError && (
-          <Label className="text-red-700 italic text-[12px]">Required*</Label>
+          <Label className="text-red-700 italic text-[12px]">
+            {errorMsg.type === "too_small" ? "Required" : ""}*
+          </Label>
         )}
       </div>
 
@@ -47,6 +57,13 @@ const CustomInput = ({
         type={type}
         {...rest}
       />
+      <div className="flex justify-end">
+        {isError && (
+          <Label className="text-red-700 italic text-[12px]">
+            {errorLabel()}
+          </Label>
+        )}
+      </div>
     </div>
   );
 };

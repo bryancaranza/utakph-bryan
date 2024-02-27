@@ -1,5 +1,4 @@
 import CustomTooltip from "@/components/custom/Tooltip";
-import { Product } from "@/lib/interface";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteProduct from "./DeleteProduct";
@@ -9,23 +8,28 @@ import EditOutlined from "@/components/icons/EditOutlined";
 import { useMainStore } from "@/lib/zustand/mainStore";
 import DeleteOutlined from "@/components/icons/DeleteOutlined";
 import { formatCurrency } from "@/lib/helpers/stringHelpers";
+import { IProduct } from "@/lib/interface";
 
 export const columnConfig = () => {
-  const { setModalConfig } = useMainStore();
+  const { setModalConfig } = useMainStore(); // for updating modal state
 
-  const columns: ColumnDef<Product>[] = [
+  // define table column
+  const columns: ColumnDef<IProduct>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => {
         return (
           <div className="flex items-center">
             <p className="select-none">Name</p>
-            <CaretSortIcon
-              className="ml-2 h-4 w-4 cursor-pointer"
+            <Button
+              variant="ghost"
+              className="px-1"
               onClick={() =>
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
-            />
+            >
+              <CaretSortIcon className="h-4 w-4" />
+            </Button>
           </div>
         );
       },
@@ -41,12 +45,15 @@ export const columnConfig = () => {
         return (
           <div className="flex items-center">
             <p className="select-none">Category</p>
-            <CaretSortIcon
-              className="ml-2 h-4 w-4 cursor-pointer"
+            <Button
+              variant="ghost"
+              className="px-1"
               onClick={() =>
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
-            />
+            >
+              <CaretSortIcon className="h-4 w-4" />
+            </Button>
           </div>
         );
       },
@@ -66,7 +73,10 @@ export const columnConfig = () => {
 
         const mappedOptions = options.map((data: string) => {
           return (
-            <div className="border rounded-md text-sm font-semibold px-1">
+            <div
+              key={data}
+              className="border rounded-md text-sm font-semibold px-1"
+            >
               {data}
             </div>
           );
@@ -85,12 +95,15 @@ export const columnConfig = () => {
         return (
           <div className="flex items-center">
             <p className="select-none">Stocks</p>
-            <CaretSortIcon
-              className="ml-2 h-4 w-4 cursor-pointer"
+            <Button
+              variant="ghost"
+              className="px-1"
               onClick={() =>
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
-            />
+            >
+              <CaretSortIcon className="h-4 w-4" />
+            </Button>
           </div>
         );
       },
@@ -113,12 +126,15 @@ export const columnConfig = () => {
         return (
           <div className="flex items-center justify-end">
             <p className="select-none">Price</p>
-            <CaretSortIcon
-              className="ml-2 h-4 w-4 cursor-pointer"
+            <Button
+              variant="ghost"
+              className="px-1"
               onClick={() =>
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
-            />
+            >
+              <CaretSortIcon className="h-4 w-4" />
+            </Button>
           </div>
         );
       },
@@ -134,8 +150,6 @@ export const columnConfig = () => {
       header: () => <div className="text-center select-none">Actions</div>,
       enableHiding: false,
       cell: ({ row }) => {
-        console.log(row.original);
-
         return (
           <div className="flex justify-center gap-2">
             <CustomTooltip content="Edit">

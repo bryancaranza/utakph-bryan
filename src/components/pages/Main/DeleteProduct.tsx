@@ -28,7 +28,7 @@ const DeleteProduct = ({ row }: Props) => {
           <p className="text-2xl font-bold">Delete Product</p>
         </div>
         <div>
-          <p className="pb-2">
+          <p className="pb-2 break-all">
             Are you sure you want to delete this product{" "}
             <span className="font-bold">{row?.name}</span>?
           </p>

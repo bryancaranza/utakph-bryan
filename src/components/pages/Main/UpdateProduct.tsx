@@ -1,7 +1,7 @@
 import CustomInput from "@/components/custom/Input";
 import { Button } from "@/components/ui/button";
 import { useFirbaseService } from "@/hooks/useFirbaseService";
-import { TProduct } from "@/lib/interface";
+import { IProduct } from "@/lib/interface";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductSchema } from "@/lib/schema";
@@ -13,12 +13,14 @@ interface Props {
 }
 
 const UpdateProduct = ({ row }: Props) => {
+  // initialize react hook form
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
     setValue,
+    setError,
   } = useForm({
     defaultValues: {
       name: row.name,
@@ -31,7 +33,10 @@ const UpdateProduct = ({ row }: Props) => {
     resolver: zodResolver(ProductSchema),
   });
 
+  // hooks
   const { updateProduct, isLoading } = useFirbaseService();
+
+  // zustand state store
   const { closeModal, modalConfig } = useMainStore();
 
   const toggleModal = () => {
@@ -39,7 +44,7 @@ const UpdateProduct = ({ row }: Props) => {
     reset();
   };
 
-  const handleUpdate = (data: TProduct) => {
+  const handleUpdate = (data: IProduct) => {
     const payload = {
       id: row.id,
       data: {
@@ -58,7 +63,25 @@ const UpdateProduct = ({ row }: Props) => {
     e: React.ChangeEvent<HTMLInputElement>,
     name: any
   ) => {
-    setValue(name, validateStringToNumber(e.target.value), {
+    const value = validateStringToNumber(e.target.value);
+
+    if (value > 999999999)
+      return setError(name, { message: "Max input is 999999999" });
+
+    setValue(name, value, {
+      shouldValidate: true,
+    });
+  };
+
+  const handleStringOnchange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    name: any
+  ) => {
+    if (e.target.value.length >= 40) {
+      setError(name, { message: "Max length is 40" });
+      return;
+    }
+    setValue(name, e.target.value, {
       shouldValidate: true,
     });
   };
@@ -78,12 +101,13 @@ const UpdateProduct = ({ row }: Props) => {
             name="name"
             control={control}
             render={({ field }) => {
-              const { ref, ...props } = field;
+              const { ref, onChange, ...props } = field;
 
               return (
                 <CustomInput
                   placeholder="Burger, Coke, Donut Etc."
                   label="Product Name*"
+                  onChange={(e) => handleStringOnchange(e, "name")}
                   errorMsg={errors.name}
                   isError={errors.name ? true : false}
                   {...props}
@@ -95,12 +119,13 @@ const UpdateProduct = ({ row }: Props) => {
             name="category"
             control={control}
             render={({ field }) => {
-              const { ref, ...props } = field;
+              const { ref, onChange, ...props } = field;
 
               return (
                 <CustomInput
                   placeholder="Product Category"
                   label="Category*"
+                  onChange={(e) => handleStringOnchange(e, "category")}
                   errorMsg={errors.category}
                   isError={errors.category ? true : false}
                   {...props}
@@ -120,9 +145,9 @@ const UpdateProduct = ({ row }: Props) => {
                     type="number"
                     placeholder="Enter Price"
                     label="Price*"
+                    onChange={(e) => handleNumberOnchange(e, "price")}
                     errorMsg={errors.price}
                     isError={errors.price ? true : false}
-                    onChange={(e) => handleNumberOnchange(e, "price")}
                     {...props}
                   />
                 );

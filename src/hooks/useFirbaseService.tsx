@@ -1,30 +1,33 @@
 import { useToast } from "@/components/ui/use-toast";
 import { CONSTANTS } from "@/lib/constants";
 import { db } from "@/lib/firebase/app";
-import { Product } from "@/lib/interface";
+import { IProduct } from "@/lib/interface";
 import { ref, set, push, onValue, query } from "firebase/database";
 import { useState } from "react";
 
 export const useFirbaseService = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false); // loading state
+  const { toast } = useToast(); // toast component for alert
 
+  // create product funtion
   const createProduct = async (
-    data: Product,
+    data: IProduct,
     callback?: { onSuccess: () => void; onError: () => void }
   ) => {
-    const newDocRef = push(ref(db, CONSTANTS.ENDPOINTS.PRODUCTS));
-    const id = newDocRef.key;
+    const newDocRef = push(ref(db, CONSTANTS.ENDPOINTS.PRODUCTS)); // creating unique id
+    const id = newDocRef.key; // unique id
 
-    setIsLoading(true);
+    setIsLoading(true); // initialize loading
 
+    // start storing to database
     await set(newDocRef, {
       ...data,
       id,
     })
       .then(() => {
-        setIsLoading(false);
+        setIsLoading(false); // done loading
 
+        // run success callback
         if (callback?.onSuccess) callback.onSuccess();
         toast({
           title: "Add product success.",
@@ -32,8 +35,9 @@ export const useFirbaseService = () => {
         });
       })
       .catch(() => {
-        setIsLoading(false);
+        setIsLoading(false); // done loading
 
+        // run error callback
         if (callback?.onError) callback.onError();
         toast({
           variant: "destructive",
@@ -43,35 +47,43 @@ export const useFirbaseService = () => {
       });
   };
 
-  const getProducts = (callback?: (response: any) => void) => {
-    const dbRef = ref(db, CONSTANTS.ENDPOINTS.PRODUCTS);
+  // get products function
+  const getProducts = (callback?: (response: IProduct[]) => void) => {
+    const dbRef = ref(db, CONSTANTS.ENDPOINTS.PRODUCTS); // setting database reference
     const dbQuery = query(dbRef);
 
-    setIsLoading(true);
+    setIsLoading(true); // initialize loading
 
     onValue(dbQuery, (snapshot) => {
-      const data = Object.values(snapshot.val());
-      setIsLoading(false);
-      if (callback) callback(data);
+      if (!snapshot?.val()) return;
+      const data: IProduct[] = Object.values(snapshot.val()); // query result data
+
+      setIsLoading(false); // done loading
+
+      // run success callback
+      if (callback) callback(data || []);
     });
   };
 
+  // delete product function
   const deleteProduct = async (
     id: string,
     callback?: { onSuccess: () => void; onError: () => void }
   ) => {
-    const dbRef = ref(db, CONSTANTS.ENDPOINTS.PRODUCTS + `/${id}`);
-    setIsLoading(true);
+    const dbRef = ref(db, CONSTANTS.ENDPOINTS.PRODUCTS + `/${id}`); // setting database reference includes unique id
 
-    await set(dbRef, null)
+    setIsLoading(true); // initialize loading
+
+    await set(dbRef, null) // payload null to delete
       .then(() => {
         toast({
           title: "Delete product success.",
           description: "You have successfully deleted a product.",
         });
 
-        setIsLoading(false);
+        setIsLoading(false); // done loading
 
+        // run success callback
         if (callback?.onSuccess) callback.onSuccess();
       })
       .catch(() => {
@@ -81,21 +93,24 @@ export const useFirbaseService = () => {
           description: "Please try again.",
         });
 
-        setIsLoading(false);
+        setIsLoading(false); // done loading
 
+        // run error callback
         if (callback?.onError) callback.onError();
       });
   };
 
+  // update product function
   const updateProduct = async (
     payload: {
       id: string;
-      data: Product;
+      data: IProduct;
     },
     callback?: { onSuccess: () => void; onError: () => void }
   ) => {
-    const dbRef = ref(db, CONSTANTS.ENDPOINTS.PRODUCTS + `/${payload.id}`);
-    setIsLoading(true);
+    const dbRef = ref(db, CONSTANTS.ENDPOINTS.PRODUCTS + `/${payload.id}`); // setting database reference includes unique id
+
+    setIsLoading(true); // initialize loading
 
     await set(dbRef, payload.data)
       .then(() => {
@@ -120,11 +135,35 @@ export const useFirbaseService = () => {
       });
   };
 
+  const searchProduct = async (
+    searchVal: string,
+    callback?: (response: any) => void
+  ) => {
+    const dbRef = ref(db, CONSTANTS.ENDPOINTS.PRODUCTS);
+    const dbQuery = query(dbRef);
+
+    setIsLoading(true);
+
+    onValue(dbQuery, (snapshot) => {
+      const data: IProduct[] = Object.values(snapshot.val());
+      const sorted = data.filter(
+        (item: any) =>
+          item.name.toLowerCase().includes(searchVal.toLowerCase()) ||
+          item.category.toLowerCase().includes(searchVal.toLowerCase()) ||
+          item.option.toLowerCase().includes(searchVal.toLowerCase())
+      );
+
+      setIsLoading(false);
+      if (callback) callback(sorted);
+    });
+  };
+
   return {
     isLoading,
     getProducts,
     createProduct,
     deleteProduct,
     updateProduct,
+    searchProduct,
   };
 };

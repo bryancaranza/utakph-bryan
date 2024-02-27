@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  ColumnFiltersState,
-  SortingState,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -13,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { DataTable } from "@/components/pages/Main/DataTable";
 import { columnConfig } from "@/components/pages/Main/Columns";
 
-import { Product } from "@/lib/interface";
+import { IProduct } from "@/lib/interface";
 import CreateProduct from "@/components/pages/Main/CreateProduct";
 import { useFirbaseService } from "@/hooks/useFirbaseService";
 import AddOutlined from "@/components/icons/AddOutlined";
@@ -21,43 +17,42 @@ import { Button } from "@/components/ui/button";
 import { useMainStore } from "@/lib/zustand/mainStore";
 import Modal from "@/components/custom/Modal";
 import { formatCurrency } from "@/lib/helpers/stringHelpers";
+import { computedSales } from "@/lib/utils";
 
 const Main = () => {
-  const [data, setData] = useState<Product[]>([]);
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [data, setData] = useState<IProduct[]>([]); // data for Table
+  const [search, setSearch] = useState(""); // search string
 
-  const { getProducts } = useFirbaseService();
+  // hooks
+  const { getProducts, searchProduct } = useFirbaseService();
+
+  // zustand state store
   const { closeModal, modalConfig, setModalConfig } = useMainStore();
 
-  const computedSales = () => {
-    const rowTotal = data.map((item) => {
-      return (item.price - item.cost) * item.stock;
-    });
-    const totalExpectedSales = rowTotal.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    }, 0);
-    return totalExpectedSales || 0;
-  };
-
+  // setting up table data
   const table = useReactTable({
     data,
     columns: columnConfig(),
     getCoreRowModel: getCoreRowModel(),
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      sorting,
-      columnFilters,
-    },
   });
 
+  // Get initial products
   useEffect(() => {
     getProducts((response) => setData(response));
   }, []);
+
+  // Get searched products
+  useEffect(() => {
+    if (!search) return getProducts((response) => setData(response));
+    const debounce = setTimeout(() => {
+      searchProduct(search, (products: IProduct[]) => {
+        setData(products);
+      });
+    }, 500);
+
+    return () => clearTimeout(debounce);
+  }, [search]);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center px-4 max-h-screen overflow-auto scrollbar">
@@ -67,13 +62,9 @@ const Main = () => {
           <p className="text-4xl">Products</p>
           <div className="flex items-center justify-between gap-2 py-4">
             <Input
-              placeholder="Search product..."
-              value={
-                (table.getColumn("name")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("name")?.setFilterValue(event.target.value)
-              }
+              placeholder="Search product, category, options..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="max-w-sm"
             />
 
@@ -92,7 +83,7 @@ const Main = () => {
         </div>
         <div className="flex mt-6 gap-1">
           <p>Expected Sales:</p>{" "}
-          <p className="font-bold">{formatCurrency(computedSales())}</p>
+          <p className="font-bold">{formatCurrency(computedSales(data))}</p>
         </div>
         <Modal
           open={modalConfig.open}
