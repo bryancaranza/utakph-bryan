@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import EditOutlined from "@/components/icons/EditOutlined";
 import { useMainStore } from "@/lib/zustand/mainStore";
 import DeleteOutlined from "@/components/icons/DeleteOutlined";
+import { formatCurrency } from "@/lib/helpers/stringHelpers";
 
 export const columnConfig = () => {
   const { setModalConfig } = useMainStore();
@@ -96,9 +97,11 @@ export const columnConfig = () => {
     {
       accessorKey: "cost",
       header: () => <div className="select-none">Cost</div>,
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("cost")}</div>
-      ),
+      cell: ({ row }) => {
+        const cost = parseFloat(row.getValue("cost"));
+        const formattedCost = formatCurrency(cost);
+        return <div className="capitalize font-medium">{formattedCost}</div>;
+      },
     },
     {
       accessorKey: "price",
@@ -117,14 +120,9 @@ export const columnConfig = () => {
       },
       cell: ({ row }) => {
         const price = parseFloat(row.getValue("price"));
+        const formattedPrice = formatCurrency(price);
 
-        // Format the price as a dollar price
-        const formatted = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "PHP",
-        }).format(price);
-
-        return <div className="text-right font-medium">{formatted}</div>;
+        return <div className="text-right font-medium">{formattedPrice}</div>;
       },
     },
     {
