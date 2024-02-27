@@ -32,7 +32,7 @@ const Main = () => {
 
   const computedSales = () => {
     const rowTotal = data.map((item) => {
-      return item.price - item.cost * item.stock;
+      return (item.price - item.cost) * item.stock;
     });
     const totalExpectedSales = rowTotal.reduce((accumulator, currentValue) => {
       return accumulator + currentValue;

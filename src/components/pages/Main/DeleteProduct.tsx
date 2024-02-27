@@ -27,10 +27,12 @@ const DeleteProduct = ({ row }: Props) => {
           <DeleteOutlined className="text-[25px]" />
           <p className="text-2xl font-bold">Delete Product</p>
         </div>
-        <p className="pb-2">
-          Are you sure you want to delete this product{" "}
-          <span className="font-bold">{row?.name}</span>?
-        </p>
+        <div>
+          <p className="pb-2">
+            Are you sure you want to delete this product{" "}
+            <span className="font-bold">{row?.name}</span>?
+          </p>
+        </div>
         <p className="italic text-sm text-red-700">
           Reminder: Deleting product will remove data from database.
         </p>

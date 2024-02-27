@@ -6,6 +6,7 @@ export const ProductSchema = z.object({
       required_error: "required field",
     })
     .min(1, { message: "Required" }),
+
   category: z
     .string({
       required_error: "required field",
