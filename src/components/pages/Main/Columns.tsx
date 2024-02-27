@@ -20,7 +20,7 @@ export const columnConfig = () => {
       header: ({ column }) => {
         return (
           <div className="flex items-center">
-            <p className="select-none">Name</p>
+            <p className="select-none pl-2">Name</p>
             <Button
               variant="ghost"
               className="px-1"
@@ -34,7 +34,7 @@ export const columnConfig = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize font-semibold max-h-[200px] max-w-[140px] truncate">
+        <div className="capitalize pl-2 font-semibold max-h-[200px] max-w-[140px] truncate">
           {row.getValue("name")}
         </div>
       ),
@@ -147,11 +147,15 @@ export const columnConfig = () => {
     },
     {
       id: "actions",
-      header: () => <div className="text-center select-none">Actions</div>,
+      header: () => (
+        <div className="flex justify-end">
+          <div className="pr-2 text-center select-none w-[100px]">Actions</div>
+        </div>
+      ),
       enableHiding: false,
       cell: ({ row }) => {
         return (
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-end pr-2 gap-2">
             <CustomTooltip content="Edit">
               <Button
                 variant="outline"

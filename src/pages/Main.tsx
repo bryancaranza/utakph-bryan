@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -16,8 +17,7 @@ import AddOutlined from "@/components/icons/AddOutlined";
 import { Button } from "@/components/ui/button";
 import { useMainStore } from "@/lib/zustand/mainStore";
 import Modal from "@/components/custom/Modal";
-import { formatCurrency } from "@/lib/helpers/stringHelpers";
-import { computedSales } from "@/lib/utils";
+import Dashboard from "@/components/pages/Main/Dashboard";
 
 const Main = () => {
   const [data, setData] = useState<IProduct[]>([]); // data for Table
@@ -35,11 +35,13 @@ const Main = () => {
     columns: columnConfig(),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   // Get initial products
   useEffect(() => {
     getProducts((response) => setData(response));
+    table.setPageSize(5);
   }, []);
 
   // Get searched products
@@ -55,12 +57,15 @@ const Main = () => {
   }, [search]);
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center px-4 max-h-screen overflow-auto scrollbar">
-      <div className="text-center text-4xl font-bold">UtakPH CRUD Exam</div>
-      <div className="max-w-[1000px] w-full">
+    <div className="w-full h-full flex flex-col items-center px-4 max-h-screen overflow-auto scrollbar">
+      <div className="text-center text-4xl font-bold py-4">
+        UtakPH CRUD Exam
+      </div>
+      <div className="max-w-[1000px] w-full flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <p className="text-4xl">Products</p>
-          <div className="flex items-center justify-between gap-2 py-4">
+          <Dashboard data={data} />
+          <div className="text-4xl font-bold">Inventory</div>
+          <div className="flex items-center justify-between gap-4">
             <Input
               placeholder="Search product, category, options..."
               value={search}
@@ -78,12 +83,47 @@ const Main = () => {
             </Button>
           </div>
         </div>
-        <div className="overflow-auto scrollbar max-h-[300px]">
+        <div className="scrollbar border rounded-md border-slate-200 shadow-sm transition-colors">
           <DataTable columns={columnConfig()} table={table} />
-        </div>
-        <div className="flex mt-6 gap-1">
-          <p>Expected Sales:</p>{" "}
-          <p className="font-bold">{formatCurrency(computedSales(data))}</p>
+          <div className="flex flex-wrap items-center justify-evenly space-x-2 p-4  text-sm">
+            <div className="flex-1 text-sm">
+              Total of{" "}
+              <span className="font-semibold">
+                {table.getFilteredRowModel().rows.length}
+              </span>{" "}
+              row(s).
+            </div>
+            <div className="flex-1 text-gray-400">
+              <p>© bryancaranza2024</p>
+            </div>
+            <div className="flex  gap-2 items-center">
+              <div>
+                Page{" "}
+                <span className="font-semibold">
+                  {table.getState().pagination.pageIndex + 1}
+                </span>{" "}
+                of <span className="font-semibold">{table.getPageCount()}</span>
+              </div>
+              <div className="space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
         <Modal
           open={modalConfig.open}

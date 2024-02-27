@@ -17,3 +17,23 @@ export const computedSales = (data: IProduct[]) => {
   }, 0);
   return totalExpectedSales || 0;
 };
+
+export const totalCosts = (data: IProduct[]) => {
+  const rowTotal = data?.map((item) => {
+    return item.cost;
+  });
+  const totalCosts = rowTotal?.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }, 0);
+  return totalCosts || 0;
+};
+
+export const totalStocks = (data: IProduct[]) => {
+  const rowTotal = data?.map((item) => {
+    return item.stock;
+  });
+  const totalStocks = rowTotal?.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }, 0);
+  return totalStocks || 0;
+};
