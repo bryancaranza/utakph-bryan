@@ -1,7 +1,7 @@
 import CustomInput from "@/components/custom/Input";
 import { Button } from "@/components/ui/button";
 import { useFirbaseService } from "@/hooks/useFirbaseService";
-import { IProduct } from "@/lib/interface";
+import { IProduct, IProductRow } from "@/lib/interface";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductSchema } from "@/lib/schema";
@@ -14,11 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CloseOutlined from "@/components/icons/CloseOutlined";
 
-interface Props {
-  row: any;
-}
-
-const UpdateProduct = ({ row }: Props) => {
+const UpdateProduct = ({ row }: IProductRow) => {
   const [options, setOptions] = useState<string[]>(row.option);
   const [option, setOption] = useState<string>("");
 
@@ -49,13 +45,14 @@ const UpdateProduct = ({ row }: Props) => {
   const { closeModal, modalConfig } = useMainStore();
 
   const toggleModal = () => {
-    closeModal(modalConfig);
-    reset();
+    closeModal(modalConfig); // run close modal function
+    reset(); // reset form values
   };
 
+  // onEnter | onClick submit
   const handleUpdate = (data: IProduct) => {
     const payload = {
-      id: row.id,
+      id: row.id!,
       data: {
         ...data,
         date_created: row.date_created,
@@ -70,6 +67,7 @@ const UpdateProduct = ({ row }: Props) => {
     reset();
   };
 
+  // onChange type number
   const handleNumberOnchange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: any
@@ -84,6 +82,7 @@ const UpdateProduct = ({ row }: Props) => {
     });
   };
 
+  // onChange type string
   const handleStringOnchange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: any

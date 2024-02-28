@@ -22,6 +22,7 @@ import moment from "moment";
 import EyeFilled from "@/components/icons/EyeFilled";
 import GitHubFilled from "@/components/icons/GitHubFilled";
 import { clickLink } from "@/lib/utils";
+import Loading from "@/components/icons/Loading";
 
 const Main = () => {
   const [data, setData] = useState<IProduct[]>([]); // data for Table
@@ -72,8 +73,13 @@ const Main = () => {
   return (
     <div className="w-full h-full flex flex-col items-center px-4 max-h-screen overflow-auto scrollbar">
       <div className="text-4xl w-full py-4 justify-between font-bold flex gap-2 item-center">
-        <div>
-          <p>UtakPH Inventory</p>
+        <div className="flex items-center gap-2">
+          <div>
+            <Loading className="w-[150px]" />
+          </div>
+          <div>
+            <p>Inventory</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <EyeFilled className="text-sm w-6" />

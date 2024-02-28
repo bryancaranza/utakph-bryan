@@ -2,6 +2,7 @@ import { z } from "zod";
 
 // zod schema w/ validations
 export const ProductSchema = z.object({
+  id: z.string().optional(),
   name: z
     .string({
       required_error: "required field",

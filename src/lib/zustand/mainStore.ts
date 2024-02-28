@@ -1,26 +1,12 @@
 import { create } from "zustand";
+import { IMainStore, IModalConfig } from "../interface";
+import { modalDefaultValues } from "../constants";
 
-interface ModalConfig {
-  open: boolean;
-  content: any;
-}
-
-export interface MainStore {
-  modalConfig: ModalConfig;
-  setModalConfig: (modalConfig: ModalConfig) => void;
-  closeModal: (modalConfig: ModalConfig) => void;
-}
-
-export const modalDefaultValues = {
-  open: false,
-  content: undefined,
-};
-
-export const useMainStore = create<MainStore>()((set) => {
+export const useMainStore = create<IMainStore>()((set) => {
   return {
     modalConfig: modalDefaultValues,
-    setModalConfig: (modalConfig: ModalConfig) => set({ modalConfig }),
-    closeModal: (modalConfig: ModalConfig) =>
+    setModalConfig: (modalConfig: IModalConfig) => set({ modalConfig }),
+    closeModal: (modalConfig: IModalConfig) =>
       set({ modalConfig: { ...modalConfig, open: false } }),
   };
 });

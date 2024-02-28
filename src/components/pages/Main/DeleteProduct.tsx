@@ -1,24 +1,25 @@
 import DeleteOutlined from "@/components/icons/DeleteOutlined";
 import { Button } from "@/components/ui/button";
 import { useFirbaseService } from "@/hooks/useFirbaseService";
+import { IProductRow } from "@/lib/interface";
 import { useMainStore } from "@/lib/zustand/mainStore";
 
-interface Props {
-  row?: any;
-}
-const DeleteProduct = ({ row }: Props) => {
-  const { deleteProduct, isLoading } = useFirbaseService();
-  const { closeModal, modalConfig } = useMainStore();
+const DeleteProduct = ({ row }: IProductRow) => {
+  const { deleteProduct, isLoading } = useFirbaseService(); // hooks
+  const { closeModal, modalConfig } = useMainStore(); // zustand state store
 
   const toggleModal = () => {
-    closeModal(modalConfig);
+    closeModal(modalConfig); // run close modal function
   };
 
-  const handleDelete = () =>
+  // onClick delete
+  const handleDelete = () => {
+    if (!row.id) return;
     deleteProduct(row.id, {
       onSuccess: toggleModal,
       onError: toggleModal,
     });
+  };
 
   return (
     <div>

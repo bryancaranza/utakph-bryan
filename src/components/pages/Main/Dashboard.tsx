@@ -4,14 +4,10 @@ import MoneyOutlined from "@/components/icons/MoneyOutlined";
 import RiseOutlined from "@/components/icons/RiseOutlined";
 import Warehouse from "@/components/icons/Warehouse";
 import { formatCurrency } from "@/lib/helpers/stringHelpers";
-import { IProduct } from "@/lib/interface";
+import { IDashboard } from "@/lib/interface";
 import { computedSales, totalCosts, totalStocks } from "@/lib/utils";
 
-interface Props {
-  data: IProduct[];
-}
-
-const Dashboard = ({ data }: Props) => {
+const Dashboard = ({ data }: IDashboard) => {
   const checkStockPrice = () => {
     return data.filter((item) => item.price < item.cost) || [];
   };

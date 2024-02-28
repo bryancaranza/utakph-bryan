@@ -1,3 +1,5 @@
+// Stores all global functions
+
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { IProduct } from "./interface";
