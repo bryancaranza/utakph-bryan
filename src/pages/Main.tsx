@@ -66,8 +66,6 @@ const Main = () => {
     return () => clearTimeout(debounce);
   }, [search]);
 
-  console.log({ views });
-
   return (
     <div className="w-full h-full flex flex-col items-center px-4 max-h-screen overflow-auto scrollbar">
       <div className="text-center text-4xl font-bold py-4">
