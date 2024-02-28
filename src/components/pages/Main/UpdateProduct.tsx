@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import CloseOutlined from "@/components/icons/CloseOutlined";
 
 const UpdateProduct = ({ row }: IProductRow) => {
-  const [options, setOptions] = useState<string[]>(row.option);
+  const [options, setOptions] = useState<string[]>(row.option || []);
   const [option, setOption] = useState<string>("");
 
   // initialize react hook form
@@ -209,6 +209,7 @@ const UpdateProduct = ({ row }: IProductRow) => {
             <div className="flex gap-2">
               <Input
                 value={option}
+                defaultValue={option}
                 placeholder="Example: Small, Medium, Large"
                 onChange={(e) => setOption(e.target.value)}
               />

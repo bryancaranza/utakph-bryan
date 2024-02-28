@@ -150,11 +150,11 @@ export const useFirbaseService = () => {
 
     onValue(dbQuery, (snapshot) => {
       const data: IProduct[] = Object.values(snapshot.val());
-      const sorted = data.filter(
-        (item: any) =>
-          item.name.toLowerCase().includes(searchVal.toLowerCase()) ||
-          item.category.toLowerCase().includes(searchVal.toLowerCase()) ||
-          item.option.toLowerCase().includes(searchVal.toLowerCase())
+      const sorted = data?.filter(
+        (item: IProduct) =>
+          item.name?.toLowerCase()?.includes(searchVal.toLowerCase()) ||
+          item.category?.toLowerCase()?.includes(searchVal.toLowerCase()) ||
+          item.option?.includes(searchVal.toLowerCase())
       );
 
       setIsLoading(false);

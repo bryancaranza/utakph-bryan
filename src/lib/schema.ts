@@ -14,7 +14,7 @@ export const ProductSchema = z.object({
       required_error: "required field",
     })
     .min(1, { message: "Required" }),
-  option: z.array(z.string()),
+  option: z.array(z.string()).optional(),
   price: z
     .number({
       required_error: "required field",
