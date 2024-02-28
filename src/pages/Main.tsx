@@ -72,21 +72,21 @@ const Main = () => {
 
   return (
     <div className="w-full h-full flex flex-col items-center px-4 max-h-screen overflow-auto scrollbar">
-      <div className="text-4xl w-full py-4 justify-between font-bold flex gap-2 item-center">
-        <div className="flex items-center gap-2">
-          <div>
-            <Loading className="w-[150px]" />
-          </div>
-          <div className="max-md:hidden">
-            <p>Inventory</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <EyeFilled className="text-sm w-6" />
-          <p className="text-3xl pb-1">{views.length}</p>
-        </div>
-      </div>
       <div className="max-w-[1400px] w-full flex flex-col gap-4">
+        <div className="text-4xl w-full pt-4 justify-between font-bold flex gap-2 item-center">
+          <div className="flex items-center gap-2">
+            <div>
+              <Loading className="w-[150px]" />
+            </div>
+            <div className="max-md:hidden">
+              <p>Inventory</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <EyeFilled className="text-sm w-6" />
+            <p className="text-3xl pb-1">{views.length}</p>
+          </div>
+        </div>
         <div className="flex flex-col gap-4">
           <Dashboard data={data} />
           <div className="flex items-center justify-between gap-4">
