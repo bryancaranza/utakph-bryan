@@ -204,6 +204,7 @@ const CreateProduct = () => {
               <Button
                 type="button"
                 variant="outline"
+                disabled={!option.length}
                 onClick={() => {
                   if (!option.length) return;
                   setOptions([...options, option]);
