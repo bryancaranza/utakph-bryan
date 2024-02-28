@@ -124,7 +124,7 @@ export const columnConfig = () => {
       accessorKey: "price",
       header: ({ column }) => {
         return (
-          <div className="flex items-center justify-end">
+          <div className="flex items-center">
             <p className="select-none">Price</p>
             <Button
               variant="ghost"
@@ -142,14 +142,14 @@ export const columnConfig = () => {
         const price = parseFloat(row.getValue("price"));
         const formattedPrice = formatCurrency(price);
 
-        return <div className="text-right font-medium">{formattedPrice}</div>;
+        return <div className="font-medium">{formattedPrice}</div>;
       },
     },
     {
       accessorKey: "date_created",
       header: ({ column }) => {
         return (
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-center">
             <p className="select-none">Date Created</p>
             <Button
               variant="ghost"
@@ -165,7 +165,7 @@ export const columnConfig = () => {
       },
       cell: ({ row }) => {
         return (
-          <div className="text-right font-medium">
+          <div className="text-center font-medium">
             {row.original.date_created
               ? moment(row.original.date_created).format("YYYY-MM-DD")
               : ""}
