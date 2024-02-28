@@ -21,7 +21,6 @@ export const useFirbaseService = () => {
     const id = newDocRef.key; // unique id
 
     setIsLoading(true); // initialize loading
-    console.log({ date });
 
     // start storing to database
     await set(newDocRef, {
