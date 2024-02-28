@@ -14,10 +14,10 @@ const Dashboard = ({ data }: IDashboard) => {
 
   return (
     <div className="flex gap-4 max-md:flex-wrap justify-between">
-      <div className="border w-full max-w-[403px] rounded-md flex border-slate-200 shadow-sm transition-colors">
-        <div className="w-full p-2">
+      <div className="border w-full rounded-md flex border-slate-200 shadow-sm transition-colors p-2">
+        <div className="w-full">
           <div className="flex gap-2 items-center">
-            <Warehouse className="w-6 fill-slate-950" />
+            <Warehouse className="w-6 fill-slate-600" />
             <p className="text-1xl font-semibold">Stocks</p>
           </div>
           <p className="text-2xl font-bold">
@@ -25,9 +25,9 @@ const Dashboard = ({ data }: IDashboard) => {
           </p>
         </div>
         <div
-          className={`flex h-full justify-center items-center p-2 ${
-            checkStockPrice()?.length > 0 ? "bg-red-700" : "bg-green-700"
-          } rounded-r-md`}
+          className={`flex h-full justify-center items-center rounded-md px-2 ${
+            checkStockPrice()?.length > 0 ? "bg-red-500" : "bg-green-500"
+          }`}
         >
           {checkStockPrice()?.length > 0 ? (
             <FallOutlined className="text-[35px] fill-white" />
@@ -36,10 +36,10 @@ const Dashboard = ({ data }: IDashboard) => {
           )}
         </div>
       </div>
-      <div className="border w-full max-w-[403px] rounded-md flex border-slate-200 shadow-sm transition-colors">
-        <div className="w-full p-2">
+      <div className="border w-full rounded-md flex border-slate-200 shadow-sm transition-colors p-2">
+        <div className="w-full">
           <div className="flex gap-2 items-center">
-            <CostsOutlined className="w-7 fill-slate-950" />
+            <CostsOutlined className="w-7 fill-slate-600" />
             <p className="text-1xl font-semibold">Costs</p>
           </div>
           <p className="text-2xl font-bold">
@@ -47,9 +47,9 @@ const Dashboard = ({ data }: IDashboard) => {
           </p>
         </div>
         <div
-          className={`flex h-full justify-center items-center p-2 ${
-            checkStockPrice()?.length > 0 ? "bg-red-700" : "bg-green-700"
-          } rounded-r-md`}
+          className={`flex h-full justify-center items-center rounded-md px-2 ${
+            checkStockPrice()?.length > 0 ? "bg-red-500" : "bg-green-500"
+          } `}
         >
           {checkStockPrice()?.length > 0 ? (
             <FallOutlined className="text-[35px] fill-white" />
@@ -58,10 +58,10 @@ const Dashboard = ({ data }: IDashboard) => {
           )}
         </div>
       </div>
-      <div className="border w-full max-w-[403px] rounded-md flex border-slate-200 shadow-sm transition-colors">
-        <div className="w-full p-2">
+      <div className="border w-full rounded-md flex border-slate-200 shadow-sm transition-colors p-2">
+        <div className="w-full">
           <div className="flex gap-2 items-center">
-            <MoneyOutlined className="w-6 fill-slate-950" />
+            <MoneyOutlined className="w-6 fill-slate-600" />
             <p className="text-1xl font-semibold">Expected Revenue</p>
           </div>
           <p className="text-2xl font-bold">
@@ -69,9 +69,9 @@ const Dashboard = ({ data }: IDashboard) => {
           </p>
         </div>
         <div
-          className={`flex h-full justify-center items-center p-2 ${
-            computedSales(data) > 0 ? "bg-green-700" : "bg-red-700"
-          } rounded-r-md`}
+          className={`flex h-full justify-center items-center rounded-md px-2 ${
+            computedSales(data) > 0 ? "bg-green-500" : "bg-red-500"
+          } `}
         >
           {computedSales(data) > 0 ? (
             <RiseOutlined className="text-[35px] fill-white" />
