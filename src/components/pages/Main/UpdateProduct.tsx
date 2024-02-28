@@ -7,12 +7,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductSchema } from "@/lib/schema";
 import { validateStringToNumber } from "@/lib/helpers/stringHelpers";
 import { useMainStore } from "@/lib/zustand/mainStore";
+import CustomTooltip from "@/components/custom/Tooltip";
+import { useState } from "react";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import CloseOutlined from "@/components/icons/CloseOutlined";
 
 interface Props {
   row: any;
 }
 
 const UpdateProduct = ({ row }: Props) => {
+  const [options, setOptions] = useState<string[]>(row.option);
+  const [option, setOption] = useState<string>("");
+
   // initialize react hook form
   const {
     handleSubmit,
@@ -49,6 +58,8 @@ const UpdateProduct = ({ row }: Props) => {
       id: row.id,
       data: {
         ...data,
+        date_created: row.date_created,
+        option: options,
         id: row.id,
       },
     };
@@ -192,29 +203,68 @@ const UpdateProduct = ({ row }: Props) => {
               }}
             />
           </div>
-          <Controller
-            name="option"
-            control={control}
-            render={({ field }) => {
-              const { ref, ...props } = field;
+          <div className="flex flex-col gap-2 px-1 mb-2">
+            <Label>
+              Option <span className="text-sm text-slate-500">(optional)</span>
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                value={option}
+                placeholder="Example: Small, Medium, Large"
+                onChange={(e) => setOption(e.target.value)}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setOptions([...options, option]);
+                  setOption("");
+                }}
+                onBlur={() => {
+                  setValue("option", options);
+                }}
+              >
+                <PlusIcon />
+              </Button>
+            </div>
+            <div className="capitalize flex w-full flex-wrap gap-1">
+              {options.map((data: string, index: number) => {
+                return (
+                  <CustomTooltip key={data} content={data}>
+                    <div
+                      key={data}
+                      onClick={(e) => e.preventDefault()}
+                      className="border flex items-center gap-1 rounded-md text-sm font-semibold pl-2 truncate max-w-[200px] cursor-default"
+                    >
+                      <p>{data}</p>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="p-0 h-[25px] rounded-l-none"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const removeOption = options.filter(
+                            (_, listIndex) => listIndex !== index
+                          );
 
-              return (
-                <CustomInput
-                  placeholder="Example: Small, Medium, Large"
-                  label="Options"
-                  subLabel={`Note: Options must be separated by "," comma.`}
-                  {...props}
-                />
-              );
-            }}
-          />
+                          setOptions(removeOption);
+                        }}
+                      >
+                        <CloseOutlined className="w-4" />
+                      </Button>
+                    </div>
+                  </CustomTooltip>
+                );
+              })}
+            </div>
+          </div>
         </div>
         <div className="flex justify-end gap-2">
-          <Button type="button" onClick={toggleModal} variant="outline">
+          <Button type="button" onClick={toggleModal} variant="ghost">
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>
-            Submit
+            Update
           </Button>
         </div>
       </form>

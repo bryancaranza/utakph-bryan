@@ -13,7 +13,7 @@ export const ProductSchema = z.object({
       required_error: "required field",
     })
     .min(1, { message: "Required" }),
-  option: z.string(),
+  option: z.array(z.string()),
   price: z
     .number({
       required_error: "required field",
@@ -32,4 +32,5 @@ export const ProductSchema = z.object({
     })
     .min(1)
     .max(999999999),
+  date_created: z.date().optional(),
 });

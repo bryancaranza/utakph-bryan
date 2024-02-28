@@ -61,7 +61,7 @@ const Main = () => {
       <div className="text-center text-4xl font-bold py-4">
         UtakPH CRUD Exam
       </div>
-      <div className="max-w-[1000px] w-full flex flex-col gap-4">
+      <div className="max-w-[1400px] w-full flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Dashboard data={data} />
           <div className="text-4xl font-bold">Inventory</div>

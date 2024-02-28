@@ -4,10 +4,13 @@ import { db } from "@/lib/firebase/app";
 import { IProduct } from "@/lib/interface";
 import { ref, set, push, onValue, query } from "firebase/database";
 import { useState } from "react";
+import moment from "moment";
 
 export const useFirbaseService = () => {
   const [isLoading, setIsLoading] = useState(false); // loading state
   const { toast } = useToast(); // toast component for alert
+
+  const date = moment().format();
 
   // create product funtion
   const createProduct = async (
@@ -18,11 +21,13 @@ export const useFirbaseService = () => {
     const id = newDocRef.key; // unique id
 
     setIsLoading(true); // initialize loading
+    console.log({ date });
 
     // start storing to database
     await set(newDocRef, {
       ...data,
       id,
+      date_created: date,
     })
       .then(() => {
         setIsLoading(false); // done loading

@@ -12,7 +12,7 @@ export const createProductDefaultValues = {
   name: "",
   category: "",
   price: 0,
-  option: "",
+  option: [""],
   cost: 0,
   stock: 0,
 };

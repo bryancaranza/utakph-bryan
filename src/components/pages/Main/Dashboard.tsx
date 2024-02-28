@@ -18,13 +18,15 @@ const Dashboard = ({ data }: Props) => {
 
   return (
     <div className="flex gap-4 max-md:flex-wrap justify-evenly">
-      <div className="border w-full rounded-md flex border-slate-200 shadow-sm transition-colors">
-        <div className="w-full p-2">
+      <div className="border w-full max-w-[403px] rounded-md flex border-slate-200 shadow-sm transition-colors">
+        <div className="w-full p-2 flex-1">
           <div className="flex gap-2 items-center">
             <Warehouse className="w-6 fill-slate-950" />
             <p className="text-1xl font-semibold">Stocks</p>
           </div>
-          <p className="text-2xl font-bold">{totalStocks(data)}</p>
+          <p className="text-2xl font-bold">
+            {totalStocks(data).toLocaleString("en-US")}
+          </p>
         </div>
         <div
           className={`flex h-full justify-center items-center p-2 ${
@@ -38,8 +40,8 @@ const Dashboard = ({ data }: Props) => {
           )}
         </div>
       </div>
-      <div className="border w-full rounded-md flex border-slate-200 shadow-sm transition-colors">
-        <div className="w-full p-2">
+      <div className="border w-full max-w-[403px] rounded-md flex border-slate-200 shadow-sm transition-colors">
+        <div className="w-full p-2 flex-1">
           <div className="flex gap-2 items-center">
             <CostsOutlined className="w-7 fill-slate-950" />
             <p className="text-1xl font-semibold">Costs</p>
@@ -60,8 +62,8 @@ const Dashboard = ({ data }: Props) => {
           )}
         </div>
       </div>
-      <div className="border w-full rounded-md flex border-slate-200 shadow-sm transition-colors">
-        <div className="w-full p-2">
+      <div className="border w-full max-w-[403px] rounded-md flex border-slate-200 shadow-sm transition-colors">
+        <div className="w-full p-2 flex-1">
           <div className="flex gap-2 items-center">
             <MoneyOutlined className="w-6 fill-slate-950" />
             <p className="text-1xl font-semibold">Expected Revenue</p>

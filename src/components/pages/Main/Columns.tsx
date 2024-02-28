@@ -9,6 +9,7 @@ import { useMainStore } from "@/lib/zustand/mainStore";
 import DeleteOutlined from "@/components/icons/DeleteOutlined";
 import { formatCurrency } from "@/lib/helpers/stringHelpers";
 import { IProduct } from "@/lib/interface";
+import moment from "moment";
 
 export const columnConfig = () => {
   const { setModalConfig } = useMainStore(); // for updating modal state
@@ -20,7 +21,7 @@ export const columnConfig = () => {
       header: ({ column }) => {
         return (
           <div className="flex items-center">
-            <p className="select-none pl-2">Name</p>
+            <p className="select-none pl-2">Product</p>
             <Button
               variant="ghost"
               className="px-1"
@@ -67,23 +68,20 @@ export const columnConfig = () => {
       accessorKey: "option",
       header: () => <div className="select-none">Options</div>,
       cell: ({ row }) => {
-        const options = row.original.option
-          ?.split(",")
-          .filter((option) => option !== "");
+        const options = row.original.option?.filter((option) => option !== "");
 
         const mappedOptions = options.map((data: string) => {
           return (
-            <div
-              key={data}
-              className="border rounded-md text-sm font-semibold px-1"
-            >
-              {data}
-            </div>
+            <CustomTooltip key={data} content={data}>
+              <div className="border rounded-md text-sm font-semibold px-1 truncate max-w-[200px]">
+                {data}
+              </div>
+            </CustomTooltip>
           );
         });
 
         return (
-          <div className="capitalize flex flex-wrap gap-2 w-fit">
+          <div className="capitalize flex max-w-[200px] flex-wrap gap-1 w-fit">
             {options.length ? mappedOptions : "N/A"}
           </div>
         );
@@ -108,7 +106,9 @@ export const columnConfig = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("stock")}</div>
+        <div className="capitalize">
+          {row.original.stock.toLocaleString("en-US")}
+        </div>
       ),
     },
     {
@@ -143,6 +143,34 @@ export const columnConfig = () => {
         const formattedPrice = formatCurrency(price);
 
         return <div className="text-right font-medium">{formattedPrice}</div>;
+      },
+    },
+    {
+      accessorKey: "date_created",
+      header: ({ column }) => {
+        return (
+          <div className="flex items-center justify-end">
+            <p className="select-none">Date Created</p>
+            <Button
+              variant="ghost"
+              className="px-1"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              <CaretSortIcon className="h-4 w-4" />
+            </Button>
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="text-right font-medium">
+            {row.original.date_created
+              ? moment(row.original.date_created).format("YYYY-MM-DD")
+              : ""}
+          </div>
+        );
       },
     },
     {
