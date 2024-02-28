@@ -229,13 +229,12 @@ const UpdateProduct = ({ row }: Props) => {
             <div className="capitalize flex w-full flex-wrap gap-1">
               {options?.map((data: string, index: number) => {
                 return (
-                  <CustomTooltip key={data} content={data}>
+                  <CustomTooltip key={data + index} content={data}>
                     <div
-                      key={data}
                       onClick={(e) => e.preventDefault()}
                       className="border flex items-center gap-1 rounded-md text-sm font-semibold pl-2 truncate max-w-[200px] cursor-default"
                     >
-                      <p>{data}</p>
+                      <p className="truncate break-all">{data}</p>
                       <Button
                         type="button"
                         variant="ghost"
