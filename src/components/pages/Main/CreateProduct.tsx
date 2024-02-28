@@ -205,11 +205,9 @@ const CreateProduct = () => {
                 type="button"
                 variant="outline"
                 onClick={() => {
+                  if (!option.length) return;
                   setOptions([...options, option]);
                   setOption("");
-                }}
-                onBlur={() => {
-                  setValue("option", options);
                 }}
               >
                 <PlusIcon />
