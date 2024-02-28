@@ -70,7 +70,7 @@ export const columnConfig = () => {
       cell: ({ row }) => {
         const options = row.original.option?.filter((option) => option !== "");
 
-        const mappedOptions = options.map((data: string) => {
+        const mappedOptions = options?.map((data: string) => {
           return (
             <CustomTooltip key={data} content={data}>
               <div className="border rounded-md text-sm font-semibold px-1 truncate max-w-[200px]">
@@ -82,7 +82,7 @@ export const columnConfig = () => {
 
         return (
           <div className="capitalize flex max-w-[200px] flex-wrap gap-1 w-fit">
-            {options.length ? mappedOptions : "N/A"}
+            {options?.length ? mappedOptions : "N/A"}
           </div>
         );
       },

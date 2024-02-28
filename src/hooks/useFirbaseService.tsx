@@ -162,7 +162,7 @@ export const useFirbaseService = () => {
     });
   };
 
-  // create product funtion
+  // add viewer funtion
   const addViews = async () => {
     const newDocRef = push(ref(db, CONSTANTS.ENDPOINTS.VIEWED)); // creating unique id
     const id = newDocRef.key; // unique id
@@ -180,7 +180,7 @@ export const useFirbaseService = () => {
     });
   };
 
-  // get products function
+  // get views function
   const getViews = (callback?: (response: any[]) => void) => {
     const dbRef = ref(db, CONSTANTS.ENDPOINTS.VIEWED); // setting database reference
     const dbQuery = query(dbRef);

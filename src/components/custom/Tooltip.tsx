@@ -11,7 +11,9 @@ const CustomTooltip = ({ children, content }: ITooltipProps) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>{children}</TooltipTrigger>
-        <TooltipContent>{content}</TooltipContent>
+        <TooltipContent>
+          <div className="break-all max-w-[300px]">{content}</div>
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

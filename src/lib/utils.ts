@@ -37,3 +37,11 @@ export const totalStocks = (data: IProduct[]) => {
   }, 0);
   return totalStocks || 0;
 };
+
+export const clickLink = (link: string, target?: string) => {
+  const a = document.createElement("a");
+  a.href = link;
+  if (target) a.target = target;
+
+  a.click();
+};
