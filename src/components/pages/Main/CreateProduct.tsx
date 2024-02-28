@@ -194,7 +194,9 @@ const CreateProduct = () => {
             />
           </div>
           <div className="flex flex-col gap-2 px-1 mb-2">
-            <Label>Option</Label>
+            <Label>
+              Option <span className="text-sm text-slate-500">(optional)</span>
+            </Label>
             <div className="flex gap-2">
               <Input
                 value={option}
