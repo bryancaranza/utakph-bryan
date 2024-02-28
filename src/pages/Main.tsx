@@ -77,7 +77,7 @@ const Main = () => {
           <div>
             <Loading className="w-[150px]" />
           </div>
-          <div>
+          <div className="max-md:hidden">
             <p>Inventory</p>
           </div>
         </div>
