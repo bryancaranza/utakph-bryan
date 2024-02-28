@@ -227,7 +227,7 @@ const UpdateProduct = ({ row }: Props) => {
               </Button>
             </div>
             <div className="capitalize flex w-full flex-wrap gap-1">
-              {options.map((data: string, index: number) => {
+              {options?.map((data: string, index: number) => {
                 return (
                   <CustomTooltip key={data} content={data}>
                     <div
