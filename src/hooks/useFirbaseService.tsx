@@ -163,6 +163,42 @@ export const useFirbaseService = () => {
     });
   };
 
+  // create product funtion
+  const addViews = async () => {
+    const newDocRef = push(ref(db, CONSTANTS.ENDPOINTS.VIEWED)); // creating unique id
+    const id = newDocRef.key; // unique id
+
+    setIsLoading(true); // initialize loading
+    console.log({ date });
+
+    // start storing to database
+    await set(newDocRef, {
+      id,
+      date_viewed: date,
+    }).then(() => {
+      localStorage.setItem("viewed", "true");
+      localStorage.setItem("view_date", moment(date).format("YYYY-MM-DD"));
+    });
+  };
+
+  // get products function
+  const getViews = (callback?: (response: any[]) => void) => {
+    const dbRef = ref(db, CONSTANTS.ENDPOINTS.VIEWED); // setting database reference
+    const dbQuery = query(dbRef);
+
+    setIsLoading(true); // initialize loading
+
+    onValue(dbQuery, (snapshot) => {
+      if (!snapshot?.val()) return;
+      const data: any[] = Object.values(snapshot.val()); // query result data
+
+      setIsLoading(false); // done loading
+
+      // run success callback
+      if (callback) callback(data || []);
+    });
+  };
+
   return {
     isLoading,
     getProducts,
@@ -170,5 +206,7 @@ export const useFirbaseService = () => {
     deleteProduct,
     updateProduct,
     searchProduct,
+    addViews,
+    getViews,
   };
 };

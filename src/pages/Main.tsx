@@ -18,13 +18,20 @@ import { Button } from "@/components/ui/button";
 import { useMainStore } from "@/lib/zustand/mainStore";
 import Modal from "@/components/custom/Modal";
 import Dashboard from "@/components/pages/Main/Dashboard";
+import moment from "moment";
+import EyeFilled from "@/components/icons/EyeFilled";
 
 const Main = () => {
+  const lsViewed = localStorage.getItem("viewed") === "true";
+  const lsViewDate = localStorage.getItem("view_date");
+  const date = moment().format("YYYY-MM-DD");
   const [data, setData] = useState<IProduct[]>([]); // data for Table
+  const [views, setViews] = useState<any[]>([]); // data for Table
   const [search, setSearch] = useState(""); // search string
 
   // hooks
-  const { getProducts, searchProduct } = useFirbaseService();
+  const { getProducts, searchProduct, getViews, addViews } =
+    useFirbaseService();
 
   // zustand state store
   const { closeModal, modalConfig, setModalConfig } = useMainStore();
@@ -41,7 +48,10 @@ const Main = () => {
   // Get initial products
   useEffect(() => {
     getProducts((response) => setData(response));
+    getViews((response) => setViews(response));
     table.setPageSize(5);
+
+    if (!lsViewed && lsViewDate !== date) addViews();
   }, []);
 
   // Get searched products
@@ -56,6 +66,8 @@ const Main = () => {
     return () => clearTimeout(debounce);
   }, [search]);
 
+  console.log({ views });
+
   return (
     <div className="w-full h-full flex flex-col items-center px-4 max-h-screen overflow-auto scrollbar">
       <div className="text-center text-4xl font-bold py-4">
@@ -64,7 +76,10 @@ const Main = () => {
       <div className="max-w-[1400px] w-full flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Dashboard data={data} />
-          <div className="text-4xl font-bold">Inventory</div>
+          <div className="text-4xl font-bold flex gap-2 item-center">
+            <p>Inventory</p> <EyeFilled className="text-sm w-10" />{" "}
+            <p>{views.length}</p>
+          </div>
           <div className="flex items-center justify-between gap-4">
             <Input
               placeholder="Search product, category, options..."
