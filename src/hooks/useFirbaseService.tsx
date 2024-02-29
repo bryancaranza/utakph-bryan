@@ -175,7 +175,7 @@ export const useFirbaseService = () => {
       id,
       date_viewed: date,
     }).then(() => {
-      localStorage.setItem("viewed", "true");
+      localStorage.setItem("viewed", `${id}`);
       localStorage.setItem("view_date", moment(date).format("YYYY-MM-DD"));
     });
   };
@@ -183,6 +183,101 @@ export const useFirbaseService = () => {
   // get views function
   const getViews = (callback?: (response: any[]) => void) => {
     const dbRef = ref(db, CONSTANTS.ENDPOINTS.VIEWED); // setting database reference
+    const dbQuery = query(dbRef);
+
+    setIsLoading(true); // initialize loading
+
+    onValue(dbQuery, (snapshot) => {
+      if (!snapshot?.val()) return;
+      const data: any[] = Object.values(snapshot.val()); // query result data
+
+      setIsLoading(false); // done loading
+
+      // run success callback
+      if (callback) callback(data || []);
+    });
+  };
+
+  // add category funtion
+  const addCategory = async (
+    category: string,
+    callback?: { onSuccess?: () => void; onError?: () => void }
+  ) => {
+    const newDocRef = push(ref(db, CONSTANTS.ENDPOINTS.CATEGORIES)); // creating unique id
+    const id = newDocRef.key; // unique id
+
+    // payload
+    const data = {
+      id,
+      category,
+      date_created: date,
+    };
+
+    setIsLoading(true); // initialize loading
+
+    // start storing to database
+    await set(newDocRef, data)
+      .then(() => {
+        setIsLoading(false); // done loading
+
+        // run success callback
+        if (callback?.onSuccess) callback.onSuccess();
+        toast({
+          title: "Add category success.",
+          description: "You have successfully added a category.",
+        });
+      })
+      .catch(() => {
+        setIsLoading(false); // done loading
+
+        // run error callback
+        if (callback?.onError) callback.onError();
+        toast({
+          variant: "destructive",
+          title: "Something went wrong!",
+          description: "Please try again.",
+        });
+      });
+  };
+
+  // remove category function
+  const removeCategory = async (
+    id: string,
+    callback?: { onSuccess?: () => void; onError?: () => void }
+  ) => {
+    const dbRef = ref(db, CONSTANTS.ENDPOINTS.CATEGORIES + `/${id}`); // setting database reference includes unique id
+
+    setIsLoading(true); // initialize loading
+
+    await set(dbRef, null) // payload null to delete
+      .then(() => {
+        toast({
+          title: "Remove category success.",
+          description: "You have successfully removed a product.",
+        });
+
+        setIsLoading(false); // done loading
+
+        // run success callback
+        if (callback?.onSuccess) callback.onSuccess();
+      })
+      .catch(() => {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong!",
+          description: "Please try again.",
+        });
+
+        setIsLoading(false); // done loading
+
+        // run error callback
+        if (callback?.onError) callback.onError();
+      });
+  };
+
+  // get categories function
+  const getCategories = (callback?: (response: any[]) => void) => {
+    const dbRef = ref(db, CONSTANTS.ENDPOINTS.CATEGORIES); // setting database reference
     const dbQuery = query(dbRef);
 
     setIsLoading(true); // initialize loading
@@ -207,5 +302,8 @@ export const useFirbaseService = () => {
     searchProduct,
     addViews,
     getViews,
+    addCategory,
+    removeCategory,
+    getCategories,
   };
 };

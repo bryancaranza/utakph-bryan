@@ -10,14 +10,22 @@ import { validateStringToNumber } from "@/lib/helpers/stringHelpers";
 import { useMainStore } from "@/lib/zustand/mainStore";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import CustomTooltip from "@/components/custom/Tooltip";
 import CloseOutlined from "@/components/icons/CloseOutlined";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 const CreateProduct = () => {
   const [options, setOptions] = useState<string[]>([]);
   const [option, setOption] = useState<string>("");
+  const [categoryList, setCategoryList] = useState<any[]>([]);
 
   // initialize react hook form
   const {
@@ -33,7 +41,7 @@ const CreateProduct = () => {
   });
 
   // hooks
-  const { createProduct, isLoading } = useFirbaseService();
+  const { createProduct, getCategories, isLoading } = useFirbaseService();
 
   // zustand state store
   const { closeModal, modalConfig } = useMainStore();
@@ -87,6 +95,10 @@ const CreateProduct = () => {
     });
   };
 
+  useEffect(() => {
+    getCategories((response) => setCategoryList(response));
+  }, []);
+
   return (
     <div>
       <div className="pb-4">
@@ -120,17 +132,37 @@ const CreateProduct = () => {
             name="category"
             control={control}
             render={({ field }) => {
-              const { ref, onChange, ...props } = field;
+              const { onChange, value } = field;
 
               return (
-                <CustomInput
-                  placeholder="Product Category"
-                  label="Category*"
-                  onChange={(e) => handleStringOnchange(e, "category")}
-                  errorMsg={errors.category}
-                  isError={errors.category ? true : false}
-                  {...props}
-                />
+                <div className="flex flex-col gap-2 px-1 mb-2">
+                  <div className="flex justify-between">
+                    <Label>Category *</Label>
+                    {errors.category ? (
+                      <Label className="text-red-700 italic text-[12px]">
+                        Required*
+                      </Label>
+                    ) : null}
+                  </div>
+                  <Select onValueChange={onChange} defaultValue={value}>
+                    <SelectTrigger
+                      className={`${
+                        errors.category ? "!border-red-700 border-2" : ""
+                      } `}
+                    >
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categoryList.map((categ) => {
+                        return (
+                          <SelectItem key={categ.id} value={categ.category}>
+                            {categ.category}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
               );
             }}
           />

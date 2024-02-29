@@ -23,6 +23,7 @@ import EyeFilled from "@/components/icons/EyeFilled";
 import GitHubFilled from "@/components/icons/GitHubFilled";
 import { clickLink } from "@/lib/utils";
 import Loading from "@/components/icons/Loading";
+import Categories from "@/components/pages/Main/Categories";
 
 const Main = () => {
   const [data, setData] = useState<IProduct[]>([]); // data for Table
@@ -97,14 +98,25 @@ const Main = () => {
               className="max-w-sm"
             />
 
-            <Button
-              className="flex gap-2"
-              onClick={() =>
-                setModalConfig({ open: true, content: <CreateProduct /> })
-              }
-            >
-              <AddOutlined /> <p className="max-md:hidden">Add Product</p>
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="flex gap-2"
+                onClick={() =>
+                  setModalConfig({ open: true, content: <Categories /> })
+                }
+              >
+                Category List
+              </Button>
+              <Button
+                className="flex gap-2"
+                onClick={() =>
+                  setModalConfig({ open: true, content: <CreateProduct /> })
+                }
+              >
+                <AddOutlined /> <p className="max-md:hidden">Add Product</p>
+              </Button>
+            </div>
           </div>
         </div>
         <div className="scrollbar border rounded-md border-slate-200 shadow-sm transition-colors">

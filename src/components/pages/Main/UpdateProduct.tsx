@@ -8,15 +8,23 @@ import { ProductSchema } from "@/lib/schema";
 import { validateStringToNumber } from "@/lib/helpers/stringHelpers";
 import { useMainStore } from "@/lib/zustand/mainStore";
 import CustomTooltip from "@/components/custom/Tooltip";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CloseOutlined from "@/components/icons/CloseOutlined";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 const UpdateProduct = ({ row }: IProductRow) => {
   const [options, setOptions] = useState<string[]>(row.option || []);
   const [option, setOption] = useState<string>("");
+  const [categoryList, setCategoryList] = useState<any[]>([]);
 
   // initialize react hook form
   const {
@@ -39,7 +47,7 @@ const UpdateProduct = ({ row }: IProductRow) => {
   });
 
   // hooks
-  const { updateProduct, isLoading } = useFirbaseService();
+  const { updateProduct, getCategories, isLoading } = useFirbaseService();
 
   // zustand state store
   const { closeModal, modalConfig } = useMainStore();
@@ -96,6 +104,10 @@ const UpdateProduct = ({ row }: IProductRow) => {
     });
   };
 
+  useEffect(() => {
+    getCategories((response) => setCategoryList(response));
+  }, []);
+
   return (
     <div>
       <div className="pb-4">
@@ -129,17 +141,26 @@ const UpdateProduct = ({ row }: IProductRow) => {
             name="category"
             control={control}
             render={({ field }) => {
-              const { ref, onChange, ...props } = field;
+              const { onChange, value } = field;
 
               return (
-                <CustomInput
-                  placeholder="Product Category"
-                  label="Category*"
-                  onChange={(e) => handleStringOnchange(e, "category")}
-                  errorMsg={errors.category}
-                  isError={errors.category ? true : false}
-                  {...props}
-                />
+                <div className="flex flex-col gap-2 px-1 mb-2">
+                  <Label>Category *</Label>
+                  <Select onValueChange={onChange} defaultValue={value}>
+                    <SelectTrigger className="text-gra">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categoryList.map((categ) => {
+                        return (
+                          <SelectItem key={categ.id} value={categ.category}>
+                            {categ.category}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
               );
             }}
           />

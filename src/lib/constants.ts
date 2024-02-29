@@ -7,6 +7,7 @@ export const CONSTANTS = {
   },
   ENDPOINTS: {
     PRODUCTS: "/products",
+    CATEGORIES: "/categories",
     VIEWED: "/viewed",
   },
 };
