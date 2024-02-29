@@ -30,7 +30,7 @@ const Main = () => {
   const [views, setViews] = useState<any[]>([]); // data for Table
   const [search, setSearch] = useState(""); // search string
 
-  const lsViewed = localStorage.getItem("viewed") === "true";
+  const lsViewer = localStorage.getItem("viewed");
   const lsViewDate = localStorage.getItem("view_date");
   const date = moment().format("YYYY-MM-DD");
 
@@ -68,7 +68,7 @@ const Main = () => {
     getViews((response) => setViews(response));
     table.setPageSize(5);
 
-    if (!lsViewed && lsViewDate !== date) addViews();
+    if (lsViewDate !== date) addViews();
   }, []);
 
   return (
@@ -83,10 +83,12 @@ const Main = () => {
               <p>Inventory</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <EyeFilled className="text-sm w-6" />
-            <p className="text-3xl pb-1">{views.length}</p>
-          </div>
+          {lsViewer === "-Nrog9Ov6lBtCj8cawQi" ? (
+            <div className="flex items-center gap-2">
+              <EyeFilled className="text-sm w-6" />
+              <p className="text-3xl pb-1">{views.length}</p>
+            </div>
+          ) : null}
         </div>
         <div className="flex flex-col gap-4">
           <Dashboard data={data} />

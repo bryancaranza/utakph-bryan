@@ -7,6 +7,7 @@ import { useState } from "react";
 import moment from "moment";
 
 export const useFirbaseService = () => {
+  const viewerId = localStorage.getItem("viewed");
   const [isLoading, setIsLoading] = useState(false); // loading state
   const { toast } = useToast(); // toast component for alert
 
@@ -165,10 +166,9 @@ export const useFirbaseService = () => {
   // add viewer funtion
   const addViews = async () => {
     const newDocRef = push(ref(db, CONSTANTS.ENDPOINTS.VIEWED)); // creating unique id
-    const id = newDocRef.key; // unique id
+    const id = viewerId !== "true" ? viewerId : newDocRef.key; // unique id
 
     setIsLoading(true); // initialize loading
-    console.log({ date });
 
     // start storing to database
     await set(newDocRef, {
