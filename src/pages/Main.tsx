@@ -67,6 +67,7 @@ const Main = () => {
     getProducts((response) => setData(response));
     getViews((response) => setViews(response));
     table.setPageSize(5);
+    table.getColumn("date_created")?.toggleSorting(true);
 
     if (lsViewDate !== date) addViews();
   }, []);
