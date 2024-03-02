@@ -24,13 +24,14 @@ import GitHubFilled from "@/components/icons/GitHubFilled";
 import { clickLink } from "@/lib/utils";
 import Loading from "@/components/icons/Loading";
 import Categories from "@/components/pages/Main/Categories";
+import { CONSTANTS } from "@/lib/constants";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const Main = () => {
   const [data, setData] = useState<IProduct[]>([]); // data for Table
   const [views, setViews] = useState<any[]>([]); // data for Table
   const [search, setSearch] = useState(""); // search string
-
-  const lsViewer = localStorage.getItem("viewed");
+  const lsViewer = localStorage.getItem("viewer_id");
   const lsViewDate = localStorage.getItem("view_date");
   const date = moment().format("YYYY-MM-DD");
 
@@ -53,14 +54,20 @@ const Main = () => {
   // Get searched products
   useEffect(() => {
     if (!search) return getProducts((response) => setData(response));
-    const debounce = setTimeout(() => {
+    return useDebounce(() => {
       searchProduct(search, (products: IProduct[]) => {
         setData(products);
       });
-    }, 500);
-
-    return () => clearTimeout(debounce);
+    });
   }, [search]);
+
+  useEffect(() => {
+    if (lsViewDate !== date) {
+      return useDebounce(() => {
+        addViews();
+      }, 1000);
+    }
+  }, [lsViewDate, date]);
 
   // Get initial products
   useEffect(() => {
@@ -68,8 +75,6 @@ const Main = () => {
     getViews((response) => setViews(response));
     table.setPageSize(5);
     table.getColumn("date_created")?.toggleSorting(true);
-
-    if (lsViewDate !== date) addViews();
   }, []);
 
   return (
@@ -84,7 +89,7 @@ const Main = () => {
               <p>Inventory</p>
             </div>
           </div>
-          {lsViewer === "-Nrog9Ov6lBtCj8cawQi" ? (
+          {lsViewer === CONSTANTS.ADMIN ? (
             <div className="flex items-center gap-2">
               <EyeFilled className="text-sm w-6" />
               <p className="text-3xl pb-1">{views.length}</p>

@@ -7,7 +7,7 @@ import { useState } from "react";
 import moment from "moment";
 
 export const useFirbaseService = () => {
-  const viewerId = localStorage.getItem("viewed");
+  const viewerId = localStorage.getItem("viewer_id");
   const [isLoading, setIsLoading] = useState(false); // loading state
   const { toast } = useToast(); // toast component for alert
 
@@ -166,7 +166,7 @@ export const useFirbaseService = () => {
   // add viewer funtion
   const addViews = async () => {
     const newDocRef = push(ref(db, CONSTANTS.ENDPOINTS.VIEWED)); // creating unique id
-    const id = viewerId !== "true" ? viewerId : newDocRef.key; // unique id
+    const id = viewerId ? viewerId : newDocRef.key; // unique id
 
     setIsLoading(true); // initialize loading
 
@@ -175,7 +175,7 @@ export const useFirbaseService = () => {
       id,
       date_viewed: date,
     }).then(() => {
-      localStorage.setItem("viewed", `${id}`);
+      localStorage.setItem("viewer_id", `${id}`);
       localStorage.setItem("view_date", moment(date).format("YYYY-MM-DD"));
     });
   };

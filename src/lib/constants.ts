@@ -10,6 +10,7 @@ export const CONSTANTS = {
     CATEGORIES: "/categories",
     VIEWED: "/viewed",
   },
+  ADMIN: "-Nrog9Ov6lBtCj8cawQi",
 };
 
 export const createProductDefaultValues = {
